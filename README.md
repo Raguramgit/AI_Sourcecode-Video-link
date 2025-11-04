@@ -4,6 +4,7 @@
 
 This project demonstrates an intelligent workflow that integrates n8n automation with the Model Context Protocol (MCP) and Claude AI to provide personalized musical instrument recommendations through a web interface.
 
+## Video URL: **https://drive.google.com/file/d/1rk3N5iw89uZr8BbteFhI0hQBYGa3b7vx/view?usp=sharing**
 ## 🎯 Project Description
 
 Sabari Musicals is an AI-powered platform that helps users discover the perfect musical instruments based on their preferences, experience level, and budget. The system uses a sophisticated workflow combining web forms, AI processing, and automated notifications.
