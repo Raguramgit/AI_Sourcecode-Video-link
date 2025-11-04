@@ -1,0 +1,370 @@
+{
+  "name": "Sabari Musicals - MCP Enhanced Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Generate a product recommendation email for a customer inquiry at Sabari Musicals.\n\n**Customer Information:**\n- Name: {{ $('Webhook').item.json.body.Name }}\n- Email: {{ $('Webhook').item.json.body.Email }}\n- Product Interest: {{ $('Webhook').item.json.body.Product_type }} (e.g., Guitar, Keyboard, Drums)\n- Budget Range: {{ $('Webhook').item.json.body.Budget_Range }} (e.g., ₹4,600 - ₹10,000)\n- Customer Message: {{ $('Webhook').item.json.body.Message }} (e.g., \"Guitar for beginner\")\n\n**Email Requirements:**\n\n1. **Subject Line:** \"{{ $json.subject }}\"\n\n2. **Opening:**\n   - Start with: \"Hello {{ $('Webhook').item.json.body.Name }} ,\"\n   - Thank them for reaching out\n   - Mention Sabari Musicals' experience (15+ years)\n   - Express enthusiasm to help them \n\n3. **Budget Acknowledgment:**\n   - Start with: \"Based on your budget of {{ $('Webhook').item.json.body.Budget_Range }}  ,\"\n   - State how many guitars you've selected (should be 5)\n   - Emphasize they're ideal for beginners\n\n4. **Product Recommendations (Exactly 5 products):**\n   Format each as:\n   {{ $('Webhook').item.json.body.Product_type }}\n   - Price: {{ $('Webhook').item.json.body.Budget_Range }}\n   - Reason: [2-3 sentences explaining why it's perfect for beginners, \n             focusing on sound quality, build, playability, and value]\n   \n\n   **Product Reasons Should Cover:**\n   - Sound quality and tone\n   - Build quality and materials\n   - Comfort and playability\n   - Suitability for beginners\n   - Value for money\n   - Unique features or design elements\n\n5. **Complementary Accessories Section:**\n   Title: \"Complementary Accessories\"\n   Include:\n   - Guitar Tuner (with brief benefit)\n   - Guitar Strap (with brief benefit)\n   - Guitar Bag (with brief benefit)\n\n6. **Tips Section:**\n   Title: \"Tips for Beginners\"\n   Include:\n   - Practice Regularly tip\n   - Learn Basic Chords First tip\n   - Play Along with Songs tip\n\n7. **Closing Paragraph:**\n   - Offer to discuss options in more detail\n   - Encourage visiting the showroom\n   - Mention ability to try guitars in person\n   - Invitation to call with questions\n\n8. **Call to Action:**\n   \"Looking forward to helping you on your musical journey!\"\n\n9. **Signature:**\n  \nWarm regards,\nSabari Musicals Team\n📍 No.171, Old No.92, 1st Floor, Arcot Rd, Vadapalani, Chennai, Tamil Nadu 600026\n☎️ +91 98415 38455 | ✉️ sabarimusicals.in@gmail.com\n🌐 www.sabarimusicals.com\n\n10. **Footer:**\n    Small text: \"This Regarding Your email Identified you reached out to Sabari Musicals for product recommendations.\"\n\n**CRITICAL FORMATTING REQUIREMENTS:**\n- Use proper spacing between sections\n- Use bullet points (•) or dashes (-) for lists\n- Bold important phrases like product names and section headers\n- Use emojis sparingly (only in contact details)\n- Keep paragraphs short (2-3 sentences max)\n- Maintain professional formatting throughout\n\n**TONE REQUIREMENTS:**\n- Warm and welcoming, not corporate\n- Helpful and consultative, not pushy\n- Confident but not arrogant\n- Educational without being condescending\n- Excited about music without being over-the-top\n\n**LANGUAGE REQUIREMENTS:**\n- Use Indian English spellings (e.g., \"favourite\" not \"favorite\")\n- Currency: Always use ₹ symbol before amounts\n- Format numbers: ₹9,000 (with comma), not ₹9000\n- Prices in words: \"nine thousand\" when appropriate\n\n**QUALITY CHECKS:**\n- Exactly 5 products recommended\n- Each product has name, price, and detailed reason\n- All sections included (greeting, products, accessories, tips, closing)\n- Contact details complete and accurate\n- No spelling or grammar errors\n- Professional yet friendly tone maintained throughout\n\nNow, generate the email using the customer information and products provided above. Make it natural, engaging, and genuinely helpful.\n",
+        "options": {
+          "systemMessage": "=You are an automated customer service assistant for Sabari Musicals, a premium musical store in Chennai, India. When a customer submits an inquiry through the website, you must send them a professional confirmation email.\n\n**Tool**\nCall the MCP client to access the mcp server and perform the task\nCall the Gmail tool attached to mcp server and send the email to {{ $('Webhook').item.json.body.Email }}\nCall the slack tool attacted to mcp server and same the information.\n\nCRITICAL INSTRUCTIONS:\n\n1. RECIPIENT EMAIL (TO field):\n   - Extract the customer's email from the webhook data\n   - Look for fields: email, emailAddress, customerEmail, or similar {{ $('Webhook').item.json.body.Email }}\n   - This is the customer who submitted the form\n   - VALIDATE that the email is not empty before sending\n   - If email is empty or invalid, DO NOT send and report error\n\n2. SENDER/FROM:\n   - The email will be sent from: sabarimusicals.in@gmail.com\n   - This is automatically handled by Gmail authentication\n\n3. EMAIL SUBJECT:\n   - Use: \"Thank You for Your Inquiry - Sabari Musicals\"\n   - Or: \"We've Received Your Guitar Inquiry - Sabari Musicals Team\"\n\n4. EMAIL MESSAGE BODY (Professional HTML Format):\n{{ $json.html }}\n\n5. FIELD EXTRACTION FROM WEBHOOK:\n   - Customer Name: Extract from fields like name, fullName, customerName\n   - Customer Email: Extract from email, emailAddress (THIS GOES IN THE \"TO\" FIELD)\n   - Phone: Extract from phone, phoneNumber, mobile\n   - Product Category: Extract from productCategory, category\n   - Budget Range: Extract from budgetRange, budget\n   - Message: Extract from message, yourMessage, inquiry\n\n6. VALIDATION RULES:\n   - NEVER send email if customer email is empty or invalid\n   - Check that email contains \"@\" and a domain\n   - Replace [placeholders] with actual data from webhook\n   - If any field is missing, show \"Not provided\"\n   - Format phone numbers properly\n   - Format budget in Indian Rupees (₹) if numeric\n\n7. ERROR HANDLING:\n   - If customer email is missing: Log error and do not send\n   - If webhook data is incomplete: Still send email with available data\n   - If email sending fails: Report the error with details\n\nEXECUTION FLOW:\n1. Receive webhook data\n2. Extract customer's email address → Use as TO field\n3. Extract all other customer details\n4. Generate HTML email with personalized data\n5. Validate email address\n6. Send email via Gmail tool\n7. Confirm successful delivery"
+        }
+      },
+      "id": "f14426ee-709d-4651-a0b7-e823bff5ee74",
+      "name": "Jina.ai Web Scraping Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        832,
+        304
+      ],
+      "typeVersion": 1.7
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "id": "3ce16f26-073b-4ccc-a65f-2ca870a9bd16",
+      "name": "gpt-4o-mini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        816,
+        592
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "BzE45jq7Sc2hLE33",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Sabari musicals Enquery",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name"
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "Mobile No"
+            },
+            {
+              "fieldLabel": "Product_type"
+            },
+            {
+              "fieldLabel": "Budget_Range "
+            },
+            {
+              "fieldLabel": "Message"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -480,
+        -48
+      ],
+      "id": "c9490d15-7e6a-4efd-b483-fdfd39bd2461",
+      "name": "On form submission",
+      "webhookId": "eebbd5c8-ee93-4afa-b962-000a72ad75b5",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "functionCode": "// Extract form data and prepare for scraping\nconst formData = $json;\n\n// Check if formData exists\nif (!formData) {\n  throw new Error('Form data is missing');\n}\n\n// Parse budget range with safety checks\nlet budgetMatch = null;\nlet minBudget = 0;\nlet maxBudget = 999999;\n\nif (formData.Budget_Range) {\n  budgetMatch = formData.Budget_Range.match(/(\\d+).*?(\\d+)/);\n  if (budgetMatch) {\n    minBudget = parseInt(budgetMatch[1]);\n    maxBudget = parseInt(budgetMatch[2]);\n  }\n}\n\n// System Prompt for Jina.ai\nconst systemPrompt = `You are a specialized web scraping agent for Sabari Musicals.\n\nExtract from https://sabarimusicals.com/product-category/musical-instruments/:\n1. Product names, prices, descriptions, links, images\n2. Shop contact details (phone, email, address)\n3. Focus on ${formData.Product_type} products\n4. Filter by budget: ₹${minBudget} - ₹${maxBudget}\n\nReturn structured JSON with products array and shopDetails object.`;\n\n// User Prompt for Jina.ai\nconst userPrompt = `Scrape https://sabarimusicals.com/product-category/musical-instruments/\n\nCustomer: ${formData.Name || 'Unknown'}\nProduct: ${formData.Product_type || 'Guitar'}\nBudget: ${formData.Budget_Range || 'Not specified'}\nRequirement: ${formData.Message || 'No specific requirements'}\n\nTask:\n1. Extract ALL ${formData.Product_type || 'Guitar'} products\n2. Filter within ₹${minBudget.toLocaleString()} - ₹${maxBudget.toLocaleString()}\n3. Prioritize beginner-friendly options\n4. Get shop contact details\n5. Return top 5 best matches\n\nFocus on: ${formData.Message || 'beginner-friendly instruments'}`;\n\nreturn {\n  json: {\n    formData: formData,\n    systemPrompt: systemPrompt,\n    userPrompt: userPrompt,\n    scrapingUrl: 'https://sabarimusicals.com/product-category/musical-instruments/',\n    minBudget: minBudget,\n    maxBudget: maxBudget,\n    productType: formData.Product_type || 'Guitar',\n    customerName: formData.Name || 'Customer',\n    customerEmail: formData.Email || ''\n  }\n};"
+      },
+      "id": "86a181b4-705d-4383-9828-7c8f62ee6ed7",
+      "name": "Prepare Scraping Prompts",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/{{ $json.scrapingUrl }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "2365be53-f4c3-4739-8ac9-42a9ca9aa6b9",
+      "name": "Jina.ai Web Scraper",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        80,
+        304
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "t5Z9c2ZsJEdH4Lf9",
+          "name": "json2video"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// Process scraped data from Jina.ai\nconst scrapedContent = $json.body || $json.text || $json;\nconst formData = $node['Prepare Scraping Prompts'].json.formData;\nconst minBudget = $node['Prepare Scraping Prompts'].json.minBudget;\nconst maxBudget = $node['Prepare Scraping Prompts'].json.maxBudget;\n\n// Parse scraped content (this would contain HTML/text from Jina.ai)\n// You'll need to extract products using regex or parsing\nlet products = [];\n\n// Example parsing logic - adjust based on actual Jina.ai response\ntry {\n  // If Jina returns structured data\n  if (typeof scrapedContent === 'object' && scrapedContent.products) {\n    products = scrapedContent.products;\n  } else {\n    // Parse text content for product information\n    const productMatches = scrapedContent.matchAll(/Product:(.*?)Price:\\s*₹([\\d,]+)/gs);\n    for (const match of productMatches) {\n      const price = parseInt(match[2].replace(/,/g, ''));\n      if (price >= minBudget && price <= maxBudget) {\n        products.push({\n          name: match[1].trim(),\n          price: price,\n          priceText: `₹${price.toLocaleString('en-IN')}`\n        });\n      }\n    }\n  }\n} catch (e) {\n  console.error('Error parsing scraped data:', e);\n}\n\n// Default shop details if not scraped\nconst shopDetails = scrapedContent.shopDetails || {\n  name: 'Sabari Musicals',\n  address: 'Chennai, Tamil Nadu',\n  phone: '044-XXXXXXXX',\n  email: 'info@sabarimusicals.com',\n  website: 'https://sabarimusicals.com',\n  experience: '15+ years of trusted service in Chennai'\n};\n\n// Filter and limit to top 5 products\nconst filteredProducts = products\n  .filter(p => p.price >= minBudget && p.price <= maxBudget)\n  .slice(0, 5);\n\nreturn {\n  json: {\n    formData: formData,\n    products: filteredProducts,\n    shopDetails: shopDetails,\n    scrapedRaw: scrapedContent\n  }\n};"
+      },
+      "id": "2e6f0829-cdbd-4e1b-b01a-8c55d83c331e",
+      "name": "Process Scraped Data",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        288,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ========================\n// n8n Code (JavaScript)\n// Builds a structured, styled HTML email like your screenshot\n// ========================\n\n// 1) Read + normalize inputs\nconst data = $json || {};\nconst form = data.formData || {};\nconst shop = data.shopDetails || {};\nlet products = data.products;\n\nfunction normalizeProducts(p) {\n  if (p == null) return [];\n  if (typeof p === \"string\") {\n    try {\n      const parsed = JSON.parse(p);\n      return Array.isArray(parsed) ? parsed : [parsed];\n    } catch { return []; }\n  }\n  if (Array.isArray(p)) return p;\n  if (typeof p === \"object\") return [p];\n  return [];\n}\nproducts = normalizeProducts(products);\n\n// Fallback products if none provided\nif (products.length === 0) {\n  const budget = form.Budget_Range || \"—\";\n  const names = [\"Yamaha F310\",\"Fender FA-115\",\"Ibanez AW540PN\",\"Kepma D100\",\"Cort AD810\"];\n  const prices = [\"₹9,000\",\"₹8,500\",\"₹9,750\",\"₹7,500\",\"₹8,600\"];\n  const reasons = [\n    \"Warm sound with excellent tonal clarity; comfy neck, great for beginners.\",\n    \"Balanced tone with classic design; play longer with ease.\",\n    \"Warm acoustic tone and smooth feel; very beginner-friendly.\",\n    \"Ergonomic design with rich tones; great value for money.\",\n    \"Solid top enhances quality; perfect for learning.\"\n  ];\n  products = names.map((n, i) => ({ title: n, priceText: prices[i], description: reasons[i] }));\n}\n\n// Helpers\nconst esc = s => String(s || \"\").replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));\nconst name = esc(form.Name || \"Customer\");\nconst prodType = esc(form.Product_Type || \"your product\");\nconst budgetRange = esc(form.Budget_Range || \"—\");\nconst shopName = esc(shop.name || \"Sabari Musicals\");\nconst shopAddr = esc(shop.address || \"\");\nconst shopPhone = esc(shop.phone || \"\");\nconst shopEmail = esc(shop.email || \"\");\nconst shopSite = esc(shop.website || \"\");\n\n// 2) Build product list (numbered, bold name, price, reason)\nlet productList = \"\";\nproducts.forEach((p, idx) => {\n  const title = esc(p.title || p.name || `Option ${idx + 1}`);\n  const priceText = esc(p.priceText || (p.price2 ? `₹ ${Number(p.price2).toLocaleString(\"en-IN\")}` : \"Price not available\"));\n  const reason = esc(p.description || p.reason || \"Great quality instrument perfect for beginners.\");\n  productList += `\n    <li style=\"margin:0 0 14px 0;\">\n      <div style=\"font-weight:700;\">${idx + 1}. ${title}</div>\n      <div style=\"margin:2px 0;\"><span style=\"font-weight:600;\">Price:</span> ${priceText}</div>\n      <div style=\"margin:2px 0;\"><span style=\"font-weight:600;\">Reason:</span> ${reason}</div>\n    </li>`;\n});\n\n// 3) Build HTML (table layout + inline CSS for email compatibility)\nconst emailHTML = `\n<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"background:#f6f7fb;padding:24px 0;\">\n  <tr>\n    <td align=\"center\">\n      <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"640\" style=\"background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#111827;\">\n        <tr>\n          <td style=\"background:#ef4444;color:#ffffff;padding:16px 20px;\">\n            <div style=\"font-size:18px;font-weight:700;\">🎸 Guitar Recommendations for You</div>\n            <div style=\"font-size:12px;opacity:.9;\">Prepared by ${shopName}</div>\n          </td>\n        </tr>\n        <tr>\n          <td style=\"padding:22px 24px;\">\n            <p style=\"margin:0 0 12px 0;font-size:14px;\">Hello <span style=\"font-weight:700;\">${name}</span>,</p>\n\n            <p style=\"margin:0 0 16px 0;font-size:14px;line-height:1.55;\">\n            </p>\n\n            <p style=\"margin:0 0 14px 0;font-size:14px;line-height:1.6;\">\n              Thank you for reaching out to us at ${shopName}! We're thrilled to help you find the perfect acoustic guitar for your journey as a beginner musician.\n              With our ${esc(shop.experience || \"15+ years\")} of trusted service in Chennai, you're in good hands.\n            </p>\n\n            <p style=\"margin:0 14px 10px 0;font-size:14px;line-height:1.6;\">\n              <span style=\"font-weight:700;\">Based on your budget of ${budgetRange}</span>, we've carefully selected\n              <span style=\"font-weight:700;\">${products.length} fantastic acoustic guitars</span> that are ideal for beginners:\n            </p>\n\n            <ol style=\"padding-left:18px;margin:0 0 8px 0;font-size:14px;line-height:1.55;\">\n              ${productList}\n            </ol>\n\n            <div style=\"height:12px;\"></div>\n\n            <div style=\"border-top:1px solid #eee;margin:14px 0;\"></div>\n\n            <p style=\"margin:0 0 8px 0;font-size:14px;font-weight:700;\">🎁 Complimentary Accessories</p>\n            <ul style=\"margin:0 0 14px 18px;padding:0;font-size:14px;line-height:1.55;\">\n              <li><span style=\"font-weight:600;\">Guitar Tuner</span>: Ensures your guitar stays in tune.</li>\n              <li><span style=\"font-weight:600;\">Guitar Strap</span>: Comfortable support while you play.</li>\n              <li><span style=\"font-weight:600;\">Guitar Bag</span>: Protection and easy transport.</li>\n            </ul>\n\n            <p style=\"margin:0 0 8px 0;font-size:14px;font-weight:700;\">📝 Tips for Beginners</p>\n            <ul style=\"margin:0 0 16px 18px;padding:0;font-size:14px;line-height:1.55;\">\n              <li><span style=\"font-weight:600;\">Practice Regularly</span>: Build muscle memory and improve quickly.</li>\n              <li><span style=\"font-weight:600;\">Learn Basic Chords First</span>: Makes songs easier and boosts confidence.</li>\n              <li><span style=\"font-weight:600;\">Play Along with Songs</span>: Improves timing and makes practice fun.</li>\n            </ul>\n\n            <p style=\"margin:0 0 14px 0;font-size:14px;line-height:1.6;\">\n              If you'd like to discuss your options in more detail, please feel free to visit our showroom! You’ll have the chance to try these guitars in person.\n              If you have any questions or need further assistance, don’t hesitate to call us. We’re happy to help.\n            </p>\n\n            <div style=\"border-top:1px solid #eee;margin:14px 0;\"></div>\n\n            <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\">\n              <tr>\n                <td style=\"font-size:12px;color:#6b7280;\">\n                  <div style=\"font-weight:700;color:#111827;\">${shopName}</div>\n                  <div>${shopAddr}</div>\n                  <div>${shopPhone ? `☎️ ${shopPhone}` : \"\"} ${shopEmail ? `📧 ${shopEmail}` : \"\"} ${shopSite ? `🔗 ${shopSite}` : \"\"}</div>\n                  <div style=\"margin-top:6px;font-style:italic;\">This email is regarding your enquiry for product recommendations.</div>\n                </td>\n              </tr>\n            </table>\n\n          </td>\n        </tr>\n      </table>\n    </td>\n  </tr>\n</table>\n`;\n\n// Optional: set a subject for downstream nodes (e.g., Send Email)\nconst subject = `Your$input.first().json.formData.body.Product_type  Recommendation Awaits from ${shopName}!`;\n\nreturn [{ html: emailHTML, subject, productsCount: products.length }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        304
+      ],
+      "id": "a50ff92e-18f8-4edd-9b08-08d0f77cb6a6",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://n8n.srv1037139.hstgr.cloud/mcp/Sabari",
+        "include": "selected",
+        "includeTools": [
+          "Send_a_message_in_Gmail",
+          "Send_a_message_in_Slack"
+        ],
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.1,
+      "position": [
+        1040,
+        560
+      ],
+      "id": "dec9e4e0-26b5-4c73-9350-fc95bdf40055",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        1856,
+        464
+      ],
+      "id": "e0157af9-0089-4254-98cc-a57725b7cf4f",
+      "name": "Send a message in Gmail",
+      "webhookId": "8589afca-1f9f-4973-96bd-5357b6b7a953",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ZjQHhK6WER48Rym7",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "Sabari"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        1808,
+        240
+      ],
+      "id": "2677772e-eac8-43e1-9197-a66864e4f993",
+      "name": "MCP Server Trigger",
+      "webhookId": "eb5afc23-4a20-4b2c-ab98-a55aafbe31e0"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sabari",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -368,
+        304
+      ],
+      "id": "e4ec8dfe-7d76-47a3-a442-2c285398aef3",
+      "name": "Webhook",
+      "webhookId": "d40d4b46-ec1e-4425-8a0d-e380ecb8d7f0"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=Response send to  {{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1136,
+        304
+      ],
+      "id": "2a74ed55-2a15-4495-bb37-1d04c01fbcad",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "body": {
+            "Name": "Raguraman",
+            "Email": "raguram7393@gmail.com",
+            "Mobile_No": "8056443430",
+            "Product_type": "Flute",
+            "Budget_Range": "Rs.1000 - Rs.5000",
+            "Message": "Flute for beginner"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "gpt-4o-mini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Jina.ai Web Scraping Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        []
+      ]
+    },
+    "Prepare Scraping Prompts": {
+      "main": [
+        [
+          {
+            "node": "Jina.ai Web Scraper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jina.ai Web Scraper": {
+      "main": [
+        [
+          {
+            "node": "Process Scraped Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Scraped Data": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Jina.ai Web Scraping Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "Jina.ai Web Scraping Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jina.ai Web Scraping Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Prepare Scraping Prompts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {},
+  "versionId": "9c5da84b-b101-475b-a468-50fdc9225603",
+  "meta": {
+    "templateId": "2943",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c17552f26cac8bcf340f76789dd65b18f228b989e5f76149a82d5b7676735542"
+  },
+  "id": "LULdpJMLSv8DJkg1",
+  "tags": []
+}
